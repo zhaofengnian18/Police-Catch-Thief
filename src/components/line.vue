@@ -29,8 +29,7 @@
     >
       <span>{{dialogText}}</span>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="backToMain">back to main</el-button>
-        <el-button type="primary" @click="startAgain">start again</el-button>
+        <el-button  type="primary" @click="backToMain">back to main</el-button>
       </span>
     </el-dialog>
   </div>
@@ -178,13 +177,6 @@ export default {
       this.$emit("backToMain");
       this.dialogVisible = false;
     },
-    startAgain: function() {
-      this.init(this.difficulty);
-      this.dialogVisible = false;
-      this.thief.x = 0;
-      this.thief.y = 0;
-      this.police.y = 0;
-    }
   }
 };
 </script>
@@ -205,13 +197,13 @@ export default {
 .thief {
   width: 37px;
   height: 50px;
-  transition: transform .1s linear;
+  transition: transform 0.1s linear;
 }
 .police {
   width: 39px;
   height: 50px;
   z-index: 10;
-  transition: transform .5s linear;
+  transition: transform 0.5s linear;
 }
 .letter {
   display: inline-block;
