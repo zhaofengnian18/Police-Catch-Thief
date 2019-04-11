@@ -25,11 +25,12 @@
       :visible.sync="dialogVisible"
       width="30%"
       :show-close="false"
+      :close-on-click-modal="false"
       center
     >
       <span>{{dialogText}}</span>
       <span slot="footer" class="dialog-footer">
-        <el-button  type="primary" @click="backToMain">back to main</el-button>
+        <el-button type="primary" @click="backToMain">back to main</el-button>
       </span>
     </el-dialog>
   </div>
@@ -40,7 +41,8 @@ export default {
   name: "CLine",
   props: {
     row: Number,
-    col: Number
+    col: Number,
+    difficulty: String
   },
   data() {
     return {
@@ -51,8 +53,7 @@ export default {
       thief: { x: 0, y: 0 },
       police: { x: -3, y: 0 },
       dialogText: "",
-      dialogVisible: false,
-      difficulty: ""
+      dialogVisible: false
     };
   },
   mounted: function() {
@@ -98,38 +99,11 @@ export default {
     }
     this.letterLines = letterLines;
     this.currentLetter = letterLines[0][0].value;
+    this.init(this.difficulty);
   },
   methods: {
     init: function(difficulty) {
-      this.difficulty = difficulty;
-      let time = 5000,
-        policeX = -3;
-      switch (difficulty) {
-        case "middle":
-          time = 3000;
-          policeX = -2;
-          break;
-        case "difficult":
-          time = 1000;
-          policeX = -1;
-          break;
-      }
-      this.police.x = policeX;
-      this.interval = setInterval(() => {
-        this.police.x++;
-        if (this.police.y >= this.thief.y && this.police.x >= this.thief.x) {
-          clearInterval(this.interval);
-          this.dialogText = "you lose";
-          this.dialogVisible = true;
-        } else {
-          const length = this.letterLines[0].length;
-          if (this.police.x >= length) {
-            this.police.y++;
-            this.police.x = 0;
-          }
-        }
-      }, time);
-      window.addEventListener("keydown", e => {
+      const keyFunc = e => {
         const typeLetter = e.key;
         // 行数未超过数据最大值
         if (this.rowIndex < this.letterLines.length) {
@@ -165,18 +139,49 @@ export default {
                     // alert("you win");
                     this.dialogText = "you win";
                     this.dialogVisible = true;
+                    window.removeEventListener("keydown", keyFunc);
                   }
                 }
               }
             }
           }
         }
-      });
+      };
+      this.difficulty = difficulty;
+      let time = 5000,
+        policeX = -3;
+      switch (difficulty) {
+        case "middle":
+          time = 3000;
+          policeX = -2;
+          break;
+        case "difficult":
+          time = 1000;
+          policeX = -1;
+          break;
+      }
+      this.police.x = policeX;
+      this.interval = setInterval(() => {
+        this.police.x++;
+        if (this.police.y >= this.thief.y && this.police.x >= this.thief.x) {
+          clearInterval(this.interval);
+          this.dialogText = "you lose";
+          this.dialogVisible = true;
+          window.removeEventListener("keydown", keyFunc);
+        } else {
+          const length = this.letterLines[0].length;
+          if (this.police.x >= length) {
+            this.police.y++;
+            this.police.x = 0;
+          }
+        }
+      }, time);
+      window.addEventListener("keydown", keyFunc);
     },
     backToMain: function() {
       this.$emit("backToMain");
       this.dialogVisible = false;
-    },
+    }
   }
 };
 </script>

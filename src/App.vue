@@ -1,7 +1,14 @@
 <template>
   <div id="app">
     <Start :class="{hidden:startHidden}" @startgame="startgame"/>
-    <CLine :class="{hidden:clineHidden}" ref="Line" :row="3" :col="30" @backToMain="backToMain"/>
+    <CLine
+      v-if="!clineHidden"
+      ref="Line"
+      :row="3"
+      :col="30"
+      @backToMain="backToMain"
+      :difficulty="difficulty"
+    />
   </div>
 </template>
 
@@ -19,14 +26,15 @@ export default {
   data() {
     return {
       startHidden: false,
-      clineHidden: true
+      clineHidden: true,
+      difficulty: ""
     };
   },
   methods: {
     startgame: function(difficulty) {
       this.startHidden = true;
       this.clineHidden = false;
-      this.$refs.Line.init(difficulty);
+      this.difficulty = difficulty;
     },
     backToMain: function() {
       this.startHidden = false;
