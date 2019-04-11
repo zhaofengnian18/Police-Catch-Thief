@@ -191,6 +191,7 @@ export default {
 .letterLines {
   position: relative;
   display: inline-block;
+  /* background-color: #f6f6f6; */
 }
 .thief,
 .police {

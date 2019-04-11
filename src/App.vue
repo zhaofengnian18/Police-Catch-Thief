@@ -52,8 +52,12 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+  background-color: #f6f6f6;
 }
 .hidden {
   display: none !important;
+}
+html {
+  background-color: #f6f6f6;
 }
 </style>
